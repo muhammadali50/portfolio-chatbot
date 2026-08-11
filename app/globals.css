@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f9fafb;
+  --foreground: #111827;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+}
+
+::selection {
+  background: rgba(251, 108, 0, 0.22);
+  color: #111827;
+}
+
+.hero-shell {
+  background: #f9fafb;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(251, 108, 0, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 108, 0, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: showcase-marquee 34s linear infinite;
+}
+
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.marquee-strip:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes showcase-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+}
