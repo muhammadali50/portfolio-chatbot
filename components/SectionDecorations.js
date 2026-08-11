@@ -25,7 +25,7 @@ export default function SectionDecorations({ items, className = "" }) {
         ) => (
           <motion.span
             key={name}
-            className={`absolute opacity-65 will-change-transform ${positionClassName}`}
+            className={`absolute opacity-[0.65] will-change-transform ${positionClassName}`}
             animate={
               reduceMotion
                 ? undefined

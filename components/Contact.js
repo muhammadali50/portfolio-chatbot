@@ -102,25 +102,25 @@ export default function Contact() {
             aria-hidden="true"
           >
             <motion.span
-              animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-1 top-[2%] text-gray-900/[0.12]"
+              animate={reduceMotion ? undefined : { y: [0, -3, 0] }}
+              transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -right-1 top-[2%] text-gray-900/[0.07]"
             >
-              <Github className="size-20 rotate-12 stroke-[1.25] sm:size-28" />
+              <Github className="size-20 rotate-6 stroke-[1.05] sm:size-28" />
             </motion.span>
             <motion.span
-              animate={reduceMotion ? undefined : { y: [0, 7, 0] }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute right-[3%] top-[40%] text-[#FB6C00]/[0.16]"
+              animate={reduceMotion ? undefined : { y: [0, 3, 0] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute right-[3%] top-[40%] text-[#FB6C00]/[0.09]"
             >
-              <Linkedin className="size-16 -rotate-12 stroke-[1.25] sm:size-24" />
+              <Linkedin className="size-16 -rotate-6 stroke-[1.05] sm:size-24" />
             </motion.span>
             <motion.span
-              animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute right-[26%] top-[69%] text-gray-900/[0.11]"
+              animate={reduceMotion ? undefined : { y: [0, -2, 0] }}
+              transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute right-[26%] top-[69%] text-gray-900/[0.07]"
             >
-              <Mail className="size-14 rotate-6 stroke-[1.25] sm:size-20" />
+              <Mail className="size-14 rotate-3 stroke-[1.05] sm:size-20" />
             </motion.span>
           </div>
 
