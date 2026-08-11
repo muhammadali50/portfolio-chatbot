@@ -49,6 +49,10 @@ body {
   contain-intrinsic-size: auto 1000px;
 }
 
+#contact:target .contact-form-card {
+  border-color: rgba(251, 108, 0, 0.55);
+}
+
 .marquee-track {
   display: flex;
   width: max-content;

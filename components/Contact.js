@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   ArrowUpRight,
   Github,
@@ -62,19 +63,64 @@ const inputClassName =
   "mt-2 w-full rounded-2xl border border-gray-200 bg-[#f9fafb] px-4 py-3.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 hover:border-gray-300 focus:border-[#FB6C00] focus:bg-white focus:ring-4 focus:ring-[#FB6C00]/10";
 
 export default function Contact() {
-  const handleSubmit = (event) => {
+  const [status, setStatus] = useState("idle");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    if (status === "sending") return;
+
+    const form = event.currentTarget;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
     const name = String(formData.get("name") || "").trim();
     const email = String(formData.get("email") || "").trim();
     const subject = String(formData.get("subject") || "").trim();
     const message = String(formData.get("message") || "").trim();
-    const emailBody = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-    const mailtoUrl = `mailto:ha0350731@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    const website = String(formData.get("website") || "");
 
-    window.location.href = mailtoUrl;
+    if (!name || !email || !subject || !message) {
+      setStatus("error");
+      return;
+    }
+
+    setStatus("sending");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message, website }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to send contact message");
+      }
+
+      form.reset();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   };
+
+  const resetFeedback = () => {
+    if (status === "success" || status === "error") {
+      setStatus("idle");
+    }
+  };
+
+  const buttonText = {
+    idle: "Send Message",
+    sending: "Sending...",
+    success: "Message sent successfully.",
+    error: "Send Message",
+  }[status];
 
   return (
     <section
@@ -184,9 +230,19 @@ export default function Contact() {
         </div>
 
         <form
+          id="contact-form"
           onSubmit={handleSubmit}
-          className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-xl shadow-gray-900/5 sm:p-8 lg:p-10"
+          onChange={resetFeedback}
+          className="contact-form-card rounded-[2rem] border border-gray-200 bg-white p-6 shadow-xl shadow-gray-900/5 transition-colors sm:p-8 lg:p-10"
         >
+          <input
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute -left-[9999px]"
+          />
           <div className="flex items-center gap-4 border-b border-gray-200 pb-6">
             <span className="grid size-12 place-items-center rounded-2xl bg-[#FB6C00] text-white shadow-lg shadow-[#FB6C00]/20">
               <Send className="size-5" aria-hidden="true" />
@@ -210,6 +266,7 @@ export default function Contact() {
                 type="text"
                 autoComplete="name"
                 placeholder="Your name"
+                maxLength={120}
                 required
                 className={inputClassName}
               />
@@ -223,6 +280,7 @@ export default function Contact() {
                 type="email"
                 autoComplete="email"
                 placeholder="Your email address"
+                maxLength={254}
                 required
                 className={inputClassName}
               />
@@ -236,6 +294,7 @@ export default function Contact() {
               name="subject"
               type="text"
               placeholder="What would you like to discuss?"
+              maxLength={200}
               required
               className={inputClassName}
             />
@@ -248,6 +307,7 @@ export default function Contact() {
               name="message"
               rows={6}
               placeholder="Tell me about your project, idea, question, or opportunity..."
+              maxLength={5000}
               required
               className={`${inputClassName} min-h-40 resize-y`}
             />
@@ -256,13 +316,28 @@ export default function Contact() {
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="submit"
-              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#FB6C00] px-6 text-sm font-bold text-white shadow-lg shadow-[#FB6C00]/20 transition hover:-translate-y-0.5 hover:bg-[#E86100] hover:shadow-xl hover:shadow-[#FB6C00]/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FB6C00]"
+              disabled={status === "sending"}
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#FB6C00] px-6 text-sm font-bold text-white shadow-lg shadow-[#FB6C00]/20 transition hover:-translate-y-0.5 hover:bg-[#E86100] hover:shadow-xl hover:shadow-[#FB6C00]/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FB6C00] disabled:cursor-not-allowed disabled:opacity-65 disabled:hover:translate-y-0"
             >
-              Send Message
+              {buttonText}
               <Send className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </button>
-            <p className="text-xs leading-5 text-gray-400">
-              Opens your default email application.
+            <p
+              aria-live="polite"
+              role={status === "error" ? "alert" : "status"}
+              className={`max-w-sm text-xs leading-5 ${
+                status === "success"
+                  ? "text-emerald-700"
+                  : status === "error"
+                    ? "text-red-600"
+                    : "text-gray-400"
+              }`}
+            >
+              {status === "success"
+                ? "Message sent successfully."
+                : status === "error"
+                  ? "Something went wrong. Please try again."
+                  : "Your message will be sent securely from this website."}
             </p>
           </div>
         </form>

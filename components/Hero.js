@@ -81,7 +81,7 @@ export default function Hero() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                href="mailto:ha0350731@gmail.com"
+                href="#contact"
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#FB6C00] px-6 text-sm font-semibold text-white shadow-lg shadow-[#FB6C00]/20 transition hover:-translate-y-0.5 hover:bg-[#E86100] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FB6C00]"
               >
                 <Mail className="size-4" aria-hidden="true" />

@@ -11,11 +11,22 @@ import {
   X,
 } from "lucide-react";
 import SectionDecorations from "@/components/SectionDecorations";
-import {
-  getDemoResponse,
-  suggestedQuestions,
-  welcomeMessage,
-} from "@/data/chatDemo";
+import { suggestedQuestions, welcomeMessage } from "@/data/chatDemo";
+
+const SESSION_STORAGE_KEY = "muhammad-ali-portfolio-chat-session";
+
+function getOrCreateSessionId() {
+  const existingSessionId = window.sessionStorage.getItem(SESSION_STORAGE_KEY);
+  if (existingSessionId) return existingSessionId;
+
+  const sessionId =
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `chat-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  window.sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+  return sessionId;
+}
 
 const chatDecorations = [
   {
@@ -76,7 +87,7 @@ function ChatPanel({ messages, isTyping, onSend, idPrefix, popup = false, onClos
           <p className="truncate font-black tracking-[-0.02em] text-gray-900">
             Muhammad Ali&apos;s Assistant
           </p>
-          <p className="mt-0.5 text-xs font-medium text-gray-500">Portfolio assistant · UI preview</p>
+          <p className="mt-0.5 text-xs font-medium text-gray-500">Portfolio assistant · AI chat</p>
         </div>
         {onClose && (
           <button
@@ -203,16 +214,14 @@ export default function AskAboutMe() {
   const [messages, setMessages] = useState([
     { id: "welcome", role: "assistant", content: welcomeMessage },
   ]);
-  const timerRef = useRef(null);
+  const sessionIdRef = useRef(null);
   const messageNumberRef = useRef(0);
   const launcherRef = useRef(null);
   const previousFocusRef = useRef(null);
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    sessionIdRef.current = getOrCreateSessionId();
   }, []);
 
   useEffect(() => {
@@ -254,7 +263,7 @@ export default function AskAboutMe() {
     };
   }, [popupOpen]);
 
-  const sendMessage = (question) => {
+  const sendMessage = async (question) => {
     const trimmedQuestion = question.trim();
     if (!trimmedQuestion || isTyping) return;
 
@@ -267,17 +276,42 @@ export default function AskAboutMe() {
     ]);
     setIsTyping(true);
 
-    timerRef.current = setTimeout(() => {
+    try {
+      const sessionId = sessionIdRef.current || getOrCreateSessionId();
+      sessionIdRef.current = sessionId;
+
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: trimmedQuestion, sessionId }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || typeof data.reply !== "string" || !data.reply.trim()) {
+        throw new Error("Chat request failed");
+      }
+
       setMessages((currentMessages) => [
         ...currentMessages,
         {
           id: `assistant-${messageNumber}`,
           role: "assistant",
-          content: getDemoResponse(trimmedQuestion),
+          content: data.reply.trim(),
         },
       ]);
+    } catch {
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: `assistant-error-${messageNumber}`,
+          role: "assistant",
+          content:
+            "I’m sorry, the assistant is unavailable right now. Please try again in a moment.",
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 850);
+    }
   };
 
   return (
