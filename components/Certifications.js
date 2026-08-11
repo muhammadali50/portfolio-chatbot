@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   Award,
   BadgeCheck,
@@ -50,67 +47,32 @@ const certificationDecorations = [
     icon: Trophy,
     className: "right-[4%] top-[8%] text-[#FB6C00]/[0.09]",
     iconClassName: "size-16 rotate-12 sm:size-24 lg:size-28",
-    duration: 10.5,
   },
   {
     name: "Medal",
     icon: Medal,
     className: "bottom-[16%] left-[3%] text-gray-900/[0.07]",
     iconClassName: "size-14 -rotate-12 sm:size-20",
-    duration: 11,
-    delay: 0.7,
   },
   {
     name: "Certificate",
     icon: FileCheck2,
     className: "left-[5%] top-[28%] hidden text-[#FB6C00]/[0.08] sm:block",
     iconClassName: "size-16 rotate-6 lg:size-22",
-    duration: 12,
-    delay: 0.4,
-  },
-  {
-    name: "Award ribbon",
-    icon: Award,
-    className: "bottom-[6%] right-[4%] text-gray-900/[0.065]",
-    iconClassName: "size-14 -rotate-6 sm:size-20",
-    duration: 9.5,
-    delay: 1.1,
-  },
-  {
-    name: "Verified credential",
-    icon: BadgeCheck,
-    className: "right-[33%] top-[3%] hidden text-gray-900/[0.06] lg:block",
-    iconClassName: "size-14 rotate-12",
-    duration: 10,
-    delay: 0.9,
   },
 ];
 
 export default function Certifications() {
-  const reduceMotion = useReducedMotion();
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, amount: 0.12 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-      };
-
   return (
     <section
       id="certifications"
       aria-labelledby="certifications-heading"
-      className="relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+      className="portfolio-section relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
     >
-      <div className="pointer-events-none absolute -right-52 top-1/3 size-96 rounded-full bg-[#FB6C00]/5 blur-3xl" />
       <SectionDecorations items={certificationDecorations} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          {...reveal}
-          className="flex flex-col gap-7 border-b border-gray-200 pb-10 md:flex-row md:items-end md:justify-between"
-        >
+        <div className="flex flex-col gap-7 border-b border-gray-200 pb-10 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-gray-600 sm:text-sm">
               <span className="h-px w-8 bg-[#FB6C00]" />
@@ -129,14 +91,12 @@ export default function Certifications() {
             Certifications and practical learning experiences that support my
             technical development.
           </p>
-        </motion.div>
+        </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {certifications.map((certificate, index) => (
-            <motion.article
+          {certifications.map((certificate) => (
+            <article
               key={certificate.name}
-              {...reveal}
-              transition={{ ...reveal.transition, delay: index * 0.07 }}
               className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-gray-200 bg-white shadow-sm shadow-gray-900/5 transition duration-300 hover:-translate-y-1.5 hover:border-[#FB6C00]/45 hover:shadow-xl hover:shadow-[#FB6C00]/8"
             >
               <a
@@ -154,7 +114,7 @@ export default function Certifications() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.025]"
                 />
-                <span className="absolute right-3 top-3 grid size-9 place-items-center rounded-full border border-white/80 bg-white/90 text-[#FB6C00] shadow-sm backdrop-blur">
+                <span className="absolute right-3 top-3 grid size-9 place-items-center rounded-full border border-white/80 bg-white/95 text-[#FB6C00] shadow-sm">
                   <ExternalLink className="size-4" aria-hidden="true" />
                 </span>
               </a>
@@ -195,7 +155,7 @@ export default function Certifications() {
                   <ExternalLink className="size-4" aria-hidden="true" />
                 </a>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>

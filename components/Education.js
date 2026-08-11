@@ -1,15 +1,10 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import {
   BookOpen,
   BrainCircuit,
   Building2,
   CalendarDays,
-  FileText,
   GraduationCap,
   Layers3,
-  Pencil,
 } from "lucide-react";
 import SectionDecorations from "@/components/SectionDecorations";
 
@@ -34,67 +29,32 @@ const educationDecorations = [
     icon: GraduationCap,
     className: "right-[4%] top-[8%] text-[#FB6C00]/[0.09]",
     iconClassName: "size-16 rotate-12 sm:size-24 lg:size-28",
-    duration: 11,
   },
   {
     name: "Books",
     icon: BookOpen,
     className: "bottom-[14%] left-[3%] text-gray-900/[0.07]",
     iconClassName: "size-14 -rotate-12 sm:size-20",
-    duration: 10,
-    delay: 0.7,
   },
   {
     name: "University",
     icon: Building2,
     className: "left-[7%] top-[23%] hidden text-gray-900/[0.065] sm:block",
     iconClassName: "size-16 rotate-6 lg:size-22",
-    duration: 12,
-    delay: 0.4,
-  },
-  {
-    name: "Academic document",
-    icon: FileText,
-    className: "bottom-[7%] right-[5%] text-[#FB6C00]/[0.08]",
-    iconClassName: "size-12 -rotate-6 sm:size-18",
-    duration: 9.5,
-    delay: 1.1,
-  },
-  {
-    name: "Study",
-    icon: Pencil,
-    className: "right-[31%] top-[3%] hidden text-gray-900/[0.06] lg:block",
-    iconClassName: "size-14 rotate-12",
-    duration: 10.5,
-    delay: 0.9,
   },
 ];
 
 export default function Education() {
-  const reduceMotion = useReducedMotion();
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, amount: 0.15 },
-        transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-      };
-
   return (
     <section
       id="education"
       aria-labelledby="education-heading"
-      className="relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+      className="portfolio-section relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
     >
-      <div className="pointer-events-none absolute -right-48 top-1/3 size-96 rounded-full bg-[#FB6C00]/5 blur-3xl" />
       <SectionDecorations items={educationDecorations} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          {...reveal}
-          className="flex flex-col gap-7 border-b border-gray-200 pb-10 sm:flex-row sm:items-end sm:justify-between"
-        >
+        <div className="flex flex-col gap-7 border-b border-gray-200 pb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-gray-600 sm:text-sm">
               <span className="h-px w-8 bg-[#FB6C00]" />
@@ -113,12 +73,10 @@ export default function Education() {
             Building a strong technical foundation through focused study and
             practical application.
           </p>
-        </motion.div>
+        </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-12">
-          <motion.aside
-            {...reveal}
-            transition={{ ...reveal.transition, delay: 0.08 }}
+          <aside
             className="relative flex items-center justify-between lg:min-h-full lg:flex-col lg:items-start"
             aria-label="Education timeline from 2023 to 2027"
           >
@@ -149,13 +107,9 @@ export default function Education() {
                 </p>
               </div>
             </div>
-          </motion.aside>
+          </aside>
 
-          <motion.article
-            {...reveal}
-            transition={{ ...reveal.transition, delay: 0.12 }}
-            className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-[#f9fafb] p-6 shadow-xl shadow-gray-900/5 sm:p-8 lg:p-10"
-          >
+          <article className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-[#f9fafb] p-6 shadow-xl shadow-gray-900/5 sm:p-8 lg:p-10">
             <div className="absolute inset-y-0 left-0 w-1 bg-[#FB6C00]" />
 
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
@@ -240,7 +194,7 @@ export default function Education() {
                 ))}
               </ul>
             </div>
-          </motion.article>
+          </article>
         </div>
       </div>
     </section>

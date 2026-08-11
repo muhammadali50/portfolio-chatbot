@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import {
   Blocks,
   BrainCircuit,
@@ -86,75 +83,32 @@ const skillsDecorations = [
     icon: Code2,
     className: "right-[4%] top-[7%] text-[#FB6C00]/[0.09]",
     iconClassName: "size-16 rotate-12 sm:size-24 lg:size-28",
-    duration: 10,
   },
   {
     name: "CSS",
     icon: Palette,
     className: "left-[3%] top-[33%] text-gray-900/[0.07]",
     iconClassName: "size-14 -rotate-12 sm:size-20 lg:size-24",
-    duration: 11,
-    delay: 0.6,
   },
   {
     name: "JavaScript",
     icon: Braces,
     className: "bottom-[24%] right-[2%] hidden text-gray-900/[0.07] sm:block",
     iconClassName: "size-20 rotate-6 lg:size-28",
-    duration: 12,
-    delay: 1.1,
-  },
-  {
-    name: "Database",
-    icon: Database,
-    className: "bottom-[8%] left-[5%] text-[#FB6C00]/[0.08]",
-    iconClassName: "size-14 -rotate-6 sm:size-20",
-    duration: 9.5,
-    delay: 0.4,
-  },
-  {
-    name: "GitHub",
-    icon: Github,
-    className: "right-[34%] top-[3%] hidden text-gray-900/[0.06] lg:block",
-    iconClassName: "size-16 rotate-12",
-    duration: 10.5,
-    delay: 0.9,
-  },
-  {
-    name: "Automation",
-    icon: Workflow,
-    className: "bottom-[3%] right-[31%] hidden text-[#FB6C00]/[0.07] lg:block",
-    iconClassName: "size-14 -rotate-12",
-    duration: 11.5,
-    delay: 1.3,
   },
 ];
 
 export default function Skills() {
-  const reduceMotion = useReducedMotion();
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, amount: 0.12 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-      };
-
   return (
     <section
       id="skills"
       aria-labelledby="skills-heading"
-      className="relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+      className="portfolio-section relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
     >
-      <div className="pointer-events-none absolute -left-52 top-1/3 size-96 rounded-full bg-[#FB6C00]/5 blur-3xl" />
       <SectionDecorations items={skillsDecorations} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          {...reveal}
-          className="flex flex-col gap-8 border-b border-gray-200 pb-10 md:flex-row md:items-end md:justify-between"
-        >
+        <div className="flex flex-col gap-8 border-b border-gray-200 pb-10 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-gray-600 sm:text-sm">
               <span className="h-px w-8 bg-[#FB6C00]" />
@@ -183,14 +137,12 @@ export default function Skills() {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-12">
           {skillGroups.map(({ title, icon: CategoryIcon, layout, skills }, index) => (
-            <motion.article
+            <article
               key={title}
-              {...reveal}
-              transition={{ ...reveal.transition, delay: index * 0.05 }}
               className={`group relative overflow-hidden rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm shadow-gray-900/5 transition duration-300 hover:-translate-y-1 hover:border-[#FB6C00]/40 hover:shadow-xl hover:shadow-[#FB6C00]/8 sm:p-7 ${layout}`}
             >
               <span className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-[#FB6C00] transition-transform duration-300 group-hover:scale-x-100" />
@@ -228,7 +180,7 @@ export default function Skills() {
                   </li>
                 ))}
               </ul>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>

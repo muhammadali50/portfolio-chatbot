@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import SectionDecorations from "@/components/SectionDecorations";
 import {
   ArrowUpRight,
@@ -37,65 +34,30 @@ const heroDecorations = [
     icon: BrainCircuit,
     className: "right-[4%] top-[7%] text-[#FB6C00]/[0.09]",
     iconClassName: "size-16 rotate-12 sm:size-20 lg:size-24",
-    duration: 10,
   },
   {
     name: "Python",
     icon: Terminal,
     className: "left-[2%] top-[58%] hidden text-gray-900/[0.07] sm:block",
     iconClassName: "size-16 -rotate-12 lg:size-24",
-    duration: 11,
-    delay: 0.8,
   },
   {
     name: "Deep learning",
     icon: Network,
     className: "left-[43%] top-[5%] text-gray-900/[0.065]",
     iconClassName: "size-14 rotate-6 sm:size-20",
-    duration: 9,
-    delay: 0.3,
-  },
-  {
-    name: "Next.js",
-    icon: PanelsTopLeft,
-    className: "bottom-[18%] right-[2%] hidden text-gray-900/[0.07] sm:block",
-    iconClassName: "size-16 -rotate-6 lg:size-20",
-    duration: 12,
-    delay: 1.2,
-  },
-  {
-    name: "n8n automation",
-    icon: Workflow,
-    className: "right-[23%] top-[2%] hidden text-[#FB6C00]/[0.08] lg:block",
-    iconClassName: "size-14 -rotate-12 lg:size-18",
-    duration: 10.5,
-    delay: 0.6,
   },
 ];
 
 export default function Hero() {
-  const reduceMotion = useReducedMotion();
-  const enter = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 22 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-      };
-
   return (
     <section className="hero-shell relative isolate overflow-x-clip px-5 pb-8 pt-5 sm:px-8 sm:pt-6 lg:px-12 lg:pt-7">
       <div className="hero-grid pointer-events-none absolute inset-0 -z-20 opacity-70" />
-      <div className="pointer-events-none absolute -right-40 -top-52 -z-10 size-[34rem] rounded-full bg-[#FB6C00]/10 blur-3xl" />
       <SectionDecorations items={heroDecorations} />
 
       <div id="home" className="relative z-10 mx-auto max-w-7xl scroll-mt-24">
         <div className="grid items-start gap-10 pt-3 sm:pt-4 lg:min-h-[34rem] lg:grid-cols-[minmax(0,1.02fr)_minmax(340px,0.98fr)] lg:gap-8 lg:pt-5 xl:grid-cols-[minmax(0,1fr)_minmax(380px,0.92fr)_minmax(160px,0.3fr)]">
-          <motion.div
-            {...enter}
-            transition={{ ...enter.transition, delay: 0.05 }}
-            className="relative z-10"
-          >
+          <div className="relative z-10">
             <h1 className="relative max-w-3xl text-[clamp(3rem,4.6vw,4.6rem)] font-black leading-[0.92] tracking-[-0.06em] text-gray-900">
               <span className="block">Hello,</span>
               <span className="relative inline-block sm:whitespace-nowrap">
@@ -151,13 +113,9 @@ export default function Hero() {
                 GitHub · LinkedIn
               </span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            {...enter}
-            transition={{ ...enter.transition, delay: 0.14 }}
-            className="relative mx-auto h-[27rem] w-full max-w-[34rem] self-start overflow-hidden sm:h-[30rem] lg:h-[33rem] lg:translate-x-2 xl:h-[34rem] xl:translate-x-6 2xl:translate-x-10"
-          >
+          <div className="relative mx-auto h-[27rem] w-full max-w-[34rem] self-start overflow-hidden sm:h-[30rem] lg:h-[33rem] lg:translate-x-2 xl:h-[34rem] xl:translate-x-6 2xl:translate-x-10">
             <div className="pointer-events-none absolute bottom-[2%] left-[1%] h-[68%] w-[74%] rounded-[48%_52%_45%_55%/55%_42%_58%_45%] bg-gray-900" />
             <div className="pointer-events-none absolute -bottom-[2%] right-[1%] h-[68%] w-[84%] rounded-[46%_54%_52%_48%/45%_42%_58%_55%] bg-[#FB6C00]" />
             <div className="pointer-events-none absolute right-[4%] top-[17%] size-16 rounded-full border-[12px] border-[#FB6C00]/25" />
@@ -168,15 +126,13 @@ export default function Hero() {
               alt="Muhammad Ali"
               width={1086}
               height={1449}
-              priority
+              preload
               sizes="(max-width: 640px) 120vw, (max-width: 1279px) 52vw, 36vw"
-              className="absolute left-1/2 top-[-16%] z-10 h-[150%] w-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_22px_24px_rgba(17,24,39,0.16)]"
+              className="absolute left-1/2 top-[-16%] z-10 h-[150%] w-auto max-w-none -translate-x-1/2 object-contain"
             />
-          </motion.div>
+          </div>
 
-          <motion.aside
-            {...enter}
-            transition={{ ...enter.transition, delay: 0.22 }}
+          <aside
             className="relative hidden h-[33rem] self-start py-10 xl:flex xl:flex-col xl:justify-between"
             aria-label="Professional summary"
           >
@@ -189,14 +145,10 @@ export default function Hero() {
               <span className="mt-4 size-3 rounded-full bg-[#FB6C00] shadow-[0_0_0_7px_rgba(251,108,0,0.1)]" />
               <span className="h-full w-px bg-gradient-to-b from-gray-300 to-transparent" />
             </div>
-          </motion.aside>
+          </aside>
         </div>
 
-        <motion.div
-          {...enter}
-          transition={{ ...enter.transition, delay: 0.3 }}
-          className="border-t border-gray-200 pt-6"
-        >
+        <div className="border-t border-gray-200 pt-6">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-600">
             Technologies I work with
           </p>
@@ -211,7 +163,7 @@ export default function Hero() {
               </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

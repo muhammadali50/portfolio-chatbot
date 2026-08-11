@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Bot,
   BrainCircuit,
-  CircleHelp,
   MessageCircle,
   Send,
   Sparkles,
@@ -25,39 +23,18 @@ const chatDecorations = [
     icon: BrainCircuit,
     className: "left-[3%] top-[9%] text-[#FB6C00]/[0.09]",
     iconClassName: "size-16 -rotate-12 sm:size-24 lg:size-28",
-    duration: 10,
   },
   {
     name: "Chat",
     icon: MessageCircle,
     className: "right-[4%] top-[13%] text-gray-900/[0.07]",
     iconClassName: "size-14 rotate-12 sm:size-20",
-    duration: 11,
-    delay: 0.7,
   },
   {
     name: "Bot",
     icon: Bot,
     className: "bottom-[13%] left-[5%] hidden text-gray-900/[0.065] sm:block",
     iconClassName: "size-16 rotate-6 lg:size-24",
-    duration: 12,
-    delay: 0.4,
-  },
-  {
-    name: "Question",
-    icon: CircleHelp,
-    className: "bottom-[7%] right-[5%] text-[#FB6C00]/[0.08]",
-    iconClassName: "size-12 -rotate-6 sm:size-18",
-    duration: 9.5,
-    delay: 1.1,
-  },
-  {
-    name: "Intelligence",
-    icon: Sparkles,
-    className: "right-[36%] top-[4%] hidden text-gray-900/[0.06] lg:block",
-    iconClassName: "size-14 rotate-12",
-    duration: 10.5,
-    delay: 0.9,
   },
 ];
 
@@ -180,11 +157,10 @@ function ChatPanel({ messages, isTyping, onSend, idPrefix, popup = false, onClos
             </span>
             <div className="flex items-center gap-1 rounded-2xl rounded-bl-md border border-gray-200 bg-white px-4 py-4 shadow-sm" aria-label="Assistant is typing">
               {[0, 1, 2].map((dot) => (
-                <motion.span
+                <span
                   key={dot}
-                  className="size-1.5 rounded-full bg-[#FB6C00]"
-                  animate={{ y: [0, -4, 0], opacity: [0.45, 1, 0.45] }}
-                  transition={{ duration: 0.8, repeat: Infinity, delay: dot * 0.14 }}
+                  className="chat-typing-dot size-1.5 rounded-full bg-[#FB6C00]"
+                  style={{ animationDelay: `${dot * 140}ms` }}
                 />
               ))}
             </div>
@@ -221,9 +197,9 @@ function ChatPanel({ messages, isTyping, onSend, idPrefix, popup = false, onClos
 }
 
 export default function AskAboutMe() {
-  const reduceMotion = useReducedMotion();
   const [popupOpen, setPopupOpen] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [sectionChatReady, setSectionChatReady] = useState(false);
   const [messages, setMessages] = useState([
     { id: "welcome", role: "assistant", content: welcomeMessage },
   ]);
@@ -231,20 +207,29 @@ export default function AskAboutMe() {
   const messageNumberRef = useRef(0);
   const launcherRef = useRef(null);
   const previousFocusRef = useRef(null);
-
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, amount: 0.12 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-      };
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setSectionChatReady(true);
+        observer.disconnect();
+      },
+      { rootMargin: "300px 0px" },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -298,15 +283,15 @@ export default function AskAboutMe() {
   return (
     <>
       <section
+        ref={sectionRef}
         id="ask-about-me"
         aria-labelledby="ask-about-me-heading"
-        className="relative scroll-mt-20 overflow-x-clip bg-transparent px-5 pb-32 pt-24 sm:px-8 sm:pb-36 sm:pt-28 lg:px-12 lg:pb-40 lg:pt-32"
+        className="portfolio-section relative scroll-mt-20 overflow-x-clip bg-transparent px-5 pb-32 pt-24 sm:px-8 sm:pb-36 sm:pt-28 lg:px-12 lg:pb-40 lg:pt-32"
       >
-        <div className="pointer-events-none absolute -right-48 top-1/3 size-96 rounded-full bg-[#FB6C00]/5 blur-3xl" />
         <SectionDecorations items={chatDecorations} />
 
         <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,1.18fr)] lg:gap-16 xl:gap-20">
-          <motion.div {...reveal}>
+          <div>
             <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-gray-600 sm:text-sm">
               <span className="h-px w-8 bg-[#FB6C00]" />
               AI Assistant
@@ -337,41 +322,40 @@ export default function AskAboutMe() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div {...reveal} transition={{ ...reveal.transition, delay: 0.1 }}>
-            <ChatPanel
-              messages={messages}
-              isTyping={isTyping}
-              onSend={sendMessage}
-              idPrefix="section"
-            />
-          </motion.div>
+          <div>
+            {popupOpen || !sectionChatReady ? (
+              <div
+                className="h-[42rem] max-h-[78vh] rounded-[2rem] border border-gray-200 bg-white"
+                aria-hidden="true"
+              />
+            ) : (
+              <ChatPanel
+                messages={messages}
+                isTyping={isTyping}
+                onSend={sendMessage}
+                idPrefix="section"
+              />
+            )}
+          </div>
         </div>
       </section>
 
-      <AnimatePresence>
-        {popupOpen && (
-          <>
-            <motion.button
+      {popupOpen && (
+        <>
+            <button
               type="button"
               aria-label="Close Ask About Me chat"
               onClick={() => setPopupOpen(false)}
-              className="fixed inset-0 z-[70] cursor-default bg-gray-900/20 backdrop-blur-[2px]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[70] cursor-default bg-gray-900/25"
             />
-            <motion.div
+            <div
               id="ask-about-me-popup"
               role="dialog"
               aria-modal="true"
               aria-label="Ask About Muhammad Ali"
               className="fixed inset-x-2 bottom-2 top-20 z-[80] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:top-auto sm:h-[min(42rem,calc(100vh-8rem))] sm:w-[26rem]"
-              initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.98 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <ChatPanel
                 messages={messages}
@@ -381,13 +365,12 @@ export default function AskAboutMe() {
                 popup
                 onClose={() => setPopupOpen(false)}
               />
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            </div>
+        </>
+      )}
 
       {!popupOpen && (
-        <motion.button
+        <button
           ref={launcherRef}
           type="button"
           onClick={() => {
@@ -396,14 +379,11 @@ export default function AskAboutMe() {
           }}
           aria-expanded="false"
           aria-controls="ask-about-me-popup"
-          className="fixed bottom-5 right-5 z-[60] inline-flex min-h-13 items-center gap-2.5 rounded-full bg-[#FB6C00] px-5 text-sm font-bold text-white shadow-[0_14px_35px_rgba(251,108,0,0.32)] transition hover:-translate-y-1 hover:bg-[#E86100] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FB6C00]"
-          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
+          className="fixed bottom-5 right-5 z-[60] inline-flex min-h-13 items-center gap-2.5 rounded-full bg-[#FB6C00] px-5 text-sm font-bold text-white shadow-lg shadow-[#FB6C00]/20 transition hover:-translate-y-0.5 hover:bg-[#E86100] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FB6C00]"
         >
           <MessageCircle className="size-5" aria-hidden="true" />
           Ask About Me
-        </motion.button>
+        </button>
       )}
     </>
   );

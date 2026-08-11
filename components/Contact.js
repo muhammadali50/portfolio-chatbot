@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   Github,
@@ -63,16 +62,6 @@ const inputClassName =
   "mt-2 w-full rounded-2xl border border-gray-200 bg-[#f9fafb] px-4 py-3.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 hover:border-gray-300 focus:border-[#FB6C00] focus:bg-white focus:ring-4 focus:ring-[#FB6C00]/10";
 
 export default function Contact() {
-  const reduceMotion = useReducedMotion();
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, amount: 0.12 },
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-      };
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -91,37 +80,24 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+      className="portfolio-section relative scroll-mt-20 overflow-x-clip bg-transparent px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
     >
-      <div className="pointer-events-none absolute -left-48 top-1/3 size-96 rounded-full bg-[#FB6C00]/5 blur-3xl" />
 
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16 xl:gap-20">
-        <motion.div {...reveal} className="relative isolate lg:py-4">
+        <div className="relative isolate lg:py-4">
           <div
             className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[25rem] overflow-hidden sm:h-[29rem]"
             aria-hidden="true"
           >
-            <motion.span
-              animate={reduceMotion ? undefined : { y: [0, -3, 0] }}
-              transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-1 top-[2%] text-gray-900/[0.07]"
-            >
+            <span className="absolute -right-1 top-[2%] text-gray-900/[0.07]">
               <Github className="size-20 rotate-6 stroke-[1.05] sm:size-28" />
-            </motion.span>
-            <motion.span
-              animate={reduceMotion ? undefined : { y: [0, 3, 0] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute right-[3%] top-[40%] text-[#FB6C00]/[0.09]"
-            >
+            </span>
+            <span className="absolute right-[3%] top-[40%] text-[#FB6C00]/[0.09]">
               <Linkedin className="size-16 -rotate-6 stroke-[1.05] sm:size-24" />
-            </motion.span>
-            <motion.span
-              animate={reduceMotion ? undefined : { y: [0, -2, 0] }}
-              transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute right-[26%] top-[69%] text-gray-900/[0.07]"
-            >
+            </span>
+            <span className="absolute right-[26%] top-[69%] text-gray-900/[0.07]">
               <Mail className="size-14 rotate-3 stroke-[1.05] sm:size-20" />
-            </motion.span>
+            </span>
           </div>
 
           <p className="relative z-10 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-gray-600 sm:text-sm">
@@ -205,11 +181,9 @@ export default function Contact() {
               Open to opportunities
             </span>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.form
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.1 }}
+        <form
           onSubmit={handleSubmit}
           className="rounded-[2rem] border border-gray-200 bg-white p-6 shadow-xl shadow-gray-900/5 sm:p-8 lg:p-10"
         >
@@ -291,7 +265,7 @@ export default function Contact() {
               Opens your default email application.
             </p>
           </div>
-        </motion.form>
+        </form>
       </div>
     </section>
   );

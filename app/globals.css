@@ -44,10 +44,18 @@ body {
   mask-image: linear-gradient(to bottom, black, transparent 88%);
 }
 
+.portfolio-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}
+
 .marquee-track {
   display: flex;
   width: max-content;
   will-change: transform;
+  contain: layout paint;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
   animation: showcase-marquee 34s linear infinite;
 }
 
@@ -63,7 +71,20 @@ body {
 
 @keyframes showcase-marquee {
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.chat-typing-dot {
+  opacity: 0.45;
+  will-change: transform, opacity;
+  animation: chat-typing 800ms ease-in-out infinite;
+}
+
+@keyframes chat-typing {
+  50% {
+    opacity: 1;
+    transform: translate3d(0, -4px, 0);
   }
 }
 
@@ -75,5 +96,12 @@ body {
   .marquee-track {
     animation: none;
     transform: none;
+    will-change: auto;
+  }
+
+  .chat-typing-dot {
+    animation: none;
+    will-change: auto;
+    opacity: 1;
   }
 }
