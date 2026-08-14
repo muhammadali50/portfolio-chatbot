@@ -6,6 +6,7 @@ import Education from "@/components/Education";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
+import Projects from "@/components/Projects";
 import ShowcaseMarquee from "@/components/ShowcaseMarquee";
 import Skills from "@/components/Skills";
 
@@ -19,6 +20,7 @@ export default function Home() {
         <About />
         <Education />
         <Skills />
+        <Projects />
         <Certifications />
         <Contact />
         <AskAboutMe />

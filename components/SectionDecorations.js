@@ -1,7 +1,7 @@
 export default function SectionDecorations({ items, className = "" }) {
   return (
     <div
-      className={`pointer-events-none absolute inset-0 z-0 overflow-hidden ${className}`}
+      className={`section-decorations pointer-events-none absolute inset-0 z-0 overflow-hidden ${className}`}
       aria-hidden="true"
     >
       {items.map(

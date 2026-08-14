@@ -2,7 +2,13 @@ export const runtime = "nodejs";
 
 const MAX_MESSAGE_LENGTH = 4000;
 const MAX_SESSION_ID_LENGTH = 200;
-const REQUEST_TIMEOUT_MS = 30000;
+const REQUEST_TIMEOUT_MS = 10000;
+const FALLBACK_REPLY =
+  "Sorry, the AI assistant is temporarily unavailable. Please try again later.";
+
+function fallbackResponse() {
+  return Response.json({ reply: FALLBACK_REPLY });
+}
 
 function clean(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -72,11 +78,11 @@ export async function POST(request) {
 
   if (!webhookUrl) {
     console.error("[chat] N8N chat integration is not configured.");
-    return Response.json(
-      { error: "The assistant is unavailable right now." },
-      { status: 503 },
-    );
+    return fallbackResponse();
   }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
     const response = await fetch(webhookUrl, {
@@ -84,15 +90,12 @@ export async function POST(request) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message, sessionId }),
       cache: "no-store",
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      signal: controller.signal,
     });
 
     if (!response.ok) {
       console.error(`[chat] n8n returned HTTP ${response.status}.`);
-      return Response.json(
-        { error: "The assistant is unavailable right now." },
-        { status: 502 },
-      );
+      return fallbackResponse();
     }
 
     let data;
@@ -101,28 +104,25 @@ export async function POST(request) {
       data = await response.json();
     } catch {
       console.error("[chat] n8n returned an invalid JSON response.");
-      return Response.json(
-        { error: "The assistant returned an invalid response." },
-        { status: 502 },
-      );
+      return fallbackResponse();
     }
 
     const reply = extractReply(data);
 
     if (!reply) {
       console.error("[chat] n8n response did not include an assistant reply.");
-      return Response.json(
-        { error: "The assistant returned an empty response." },
-        { status: 502 },
-      );
+      return fallbackResponse();
     }
 
     return Response.json({ reply });
-  } catch {
-    console.error("[chat] Unable to connect to the n8n workflow.");
-    return Response.json(
-      { error: "The assistant is unavailable right now." },
-      { status: 502 },
-    );
+  } catch (error) {
+    const reason =
+      error instanceof Error && error.name === "AbortError"
+        ? "n8n request timed out."
+        : "Unable to connect to the n8n workflow.";
+    console.error(`[chat] ${reason}`);
+    return fallbackResponse();
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

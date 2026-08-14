@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const links = [
   { label: "Home", href: "#home", id: "home" },
   { label: "About", href: "#about", id: "about" },
   { label: "Education", href: "#education", id: "education" },
   { label: "Skills", href: "#skills", id: "skills" },
+  { label: "Projects", href: "#projects", id: "projects" },
   { label: "Certifications", href: "#certifications", id: "certifications" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
@@ -76,20 +78,23 @@ export default function Navbar() {
           })}
         </div>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          className="grid size-11 place-items-center rounded-full border border-gray-200 bg-white text-gray-900 transition hover:border-[#FB6C00] hover:text-[#FB6C00] lg:hidden"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-navigation"
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-        >
-          {menuOpen ? (
-            <X className="size-5" aria-hidden="true" />
-          ) : (
-            <Menu className="size-5" aria-hidden="true" />
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="grid size-11 place-items-center rounded-full border border-gray-200 bg-white text-gray-900 transition hover:border-[#FB6C00] hover:text-[#FB6C00] lg:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          >
+            {menuOpen ? (
+              <X className="size-5" aria-hidden="true" />
+            ) : (
+              <Menu className="size-5" aria-hidden="true" />
+            )}
+          </button>
+        </div>
 
         {menuOpen && (
           <div
