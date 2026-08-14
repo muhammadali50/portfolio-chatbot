@@ -21,7 +21,7 @@ const themeScript = `
 
 /** @type {import("next").Metadata} */
 export const metadata = {
-  metadataBase: new URL("https://portfolio-chatbot-wheat.vercel.app/"),
+  metadataBase: new URL("https://muhmammad-ali-ai-portfolio.vercel.app/"),
   title:
     "Muhammad Ali | AI Developer, Full-Stack Developer & Automation Enthusiast",
   description:
@@ -51,10 +51,10 @@ export const metadata = {
       "Portfolio of Muhammad Ali, an Artificial Intelligence student and developer working with Machine Learning, Deep Learning, Full-Stack Web Development, Computer Vision, NLP, and n8n Automation.",
     images: [
       {
-        url: "/images/muhammad_ali_open_graph_1200x630.png",
+        url: "/images/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Muhammad Ali — AI Developer portfolio",
+        alt: "Muhammad Ali Portfolio",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const metadata = {
       "Muhammad Ali | AI Developer, Full-Stack Developer & Automation Enthusiast",
     description:
       "Portfolio of Muhammad Ali, an Artificial Intelligence student and developer working with Machine Learning, Deep Learning, Full-Stack Web Development, Computer Vision, NLP, and n8n Automation.",
-    images: ["/images/muhammad_ali_open_graph_1200x630.png"],
+    images: ["/images/og-image.png"],
   },
 };
 

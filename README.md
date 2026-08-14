@@ -2,7 +2,7 @@
 
 A modern personal portfolio for Muhammad Ali, an Artificial Intelligence student and developer focused on AI, machine learning, full-stack web development, and automation.
 
-- **Live site:** [portfolio-chatbot-wheat.vercel.app](https://portfolio-chatbot-wheat.vercel.app/)
+- **Live site:** [muhmammad-ali-ai-portfolio.vercel.app](https://muhmammad-ali-ai-portfolio.vercel.app/)
 - **GitHub repository:** [muhammadali50/portfolio-chatbot](https://github.com/muhammadali50/portfolio-chatbot)
 
 ## Features
